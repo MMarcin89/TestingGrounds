@@ -32,3 +32,8 @@ void UPatrolRoute::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	// ...
 }
 
+TArray<AActor*> UPatrolRoute::GetTargetPts() const
+{
+	return TargetPts;
+}
+

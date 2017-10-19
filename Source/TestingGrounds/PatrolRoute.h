@@ -24,6 +24,8 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	TArray<AActor*> GetTargetPts()const;
 		
-	
+	UPROPERTY(EditAnywhere, Category = "Patrol Route")
+		TArray<AActor*> TargetPts;
 };

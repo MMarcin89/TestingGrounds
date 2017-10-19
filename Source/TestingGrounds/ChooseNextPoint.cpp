@@ -3,23 +3,26 @@
 #include "ChooseNextPoint.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Classes/AIController.h "
-#include "PatrollingGuard.h"
+#include "PatrolRoute.h"
 
 
 EBTNodeResult::Type UChooseNextPoint::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	//GetPatrolPoints
-	auto AIController = OwnerComp.GetAIOwner();
-	auto ControlledPawn = AIController->GetControlledPawn();
-	auto Guard = Cast<APatrollingGuard>(ControlledPawn);
-	auto TargetPoints = Guard->TargetPoints;
+	auto ControlledPawn = OwnerComp.GetAIOwner()->GetControlledPawn();
+	auto PatrolRoute = ControlledPawn->FindComponentByClass<UPatrolRoute>();
+
+	if (!ensure(PatrolRoute)) { return EBTNodeResult::Failed; }
+
+	
 	//SetNextMovePointNumber
+	auto TargetPts = PatrolRoute->GetTargetPts();
 	auto Blackboard = OwnerComp.GetBlackboardComponent();
 	auto Index = Blackboard->GetValueAsInt(IndexKey.SelectedKeyName);
-	Blackboard->SetValueAsObject(NextMovePoint.SelectedKeyName, TargetPoints[Index]);
+	Blackboard->SetValueAsObject(NextMovePoint.SelectedKeyName, TargetPts[Index]);
 
 	//CycleIndex
-	auto NextMoveNumber=(Index+1)% TargetPoints.Num();
+	auto NextMoveNumber=(Index+1)% TargetPts.Num();
 	
 	Blackboard->SetValueAsInt(IndexKey.SelectedKeyName,NextMoveNumber );
 
