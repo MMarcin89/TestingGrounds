@@ -17,6 +17,8 @@ EBTNodeResult::Type UChooseNextPoint::ExecuteTask(UBehaviorTreeComponent& OwnerC
 	
 	//SetNextMovePointNumber
 	auto TargetPts = PatrolRoute->GetTargetPts();
+	if (!ensure(TargetPts.Num())) { return EBTNodeResult::Failed; }
+
 	auto Blackboard = OwnerComp.GetBlackboardComponent();
 	auto Index = Blackboard->GetValueAsInt(IndexKey.SelectedKeyName);
 	Blackboard->SetValueAsObject(NextMovePoint.SelectedKeyName, TargetPts[Index]);
